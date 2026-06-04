@@ -75,41 +75,60 @@ def bold_term(item):
     return item
 
 
-def render_callout(cell):
-    full = tidy(cell.text)
-    if not full:
+DROP_RE = re.compile(r"^怎么用这份资料")
+# 各文档方框标签家族 → 统一重构标签。
+# 从具体到一般匹配；消费可选的括号注（如“(背这段)”“(讲清就够)”）和分隔符。
+LABEL_RULES = [
+    (re.compile(r"^(?:面试这样答|面试速答|核心要点|核心)(?:\s*[（(][^）)]*[）)])?\s*[:：]?\s*"),
+     "一句话讲透", "quote"),
+    (re.compile(r"^(?:面试前最后叮嘱|给你的叮嘱)\s*[:：]?\s*"),
+     "抓住这几点", "points"),
+    (re.compile(r"^复习建议\s*[:：]?\s*"),
+     "学习建议", "section"),
+    (re.compile(r"^(?:经典题\s*/?\s*高频追问|高频追问(?:\s*/?\s*延伸)?|经典题|实战(?:\s*/?\s*进阶)?|延伸)\s*[:：]?\s*"),
+     "再往下挖", "section"),
+    (re.compile(r"^(?:易错点(?:\s*·?\s*别答错)?|坑(?:\s*/?\s*注意)?)\s*[:：]?\s*"),
+     "常见误区", "section"),
+]
+
+
+def render_block(label, style, body):
+    body = (body or "").strip()
+    if not body and not label:
         return None
-    if full.startswith("怎么用这份资料"):
-        return None  # 元说明并入 README
-
-    label, style, body = None, "quote", full
-    rules = [
-        (("面试这样答", "面试速答"), "一句话讲透", "quote"),
-        (("面试前最后叮嘱",), "抓住这几点", "points"),
-        (("高频追问 / 延伸", "高频追问/延伸", "高频追问", "延伸"), "再往下挖", "section"),
-        (("易错点",), "常见误区", "section"),
-    ]
-    for prefixes, lab, sty in rules:
-        for ph in prefixes:
-            if full.startswith(ph):
-                body = full[len(ph):].strip().strip(" :：·—-/").strip()
-                label, style = lab, sty
-                break
-        if label:
-            break
-
-    body = body.strip()
     if style == "quote":
         line = re.sub(r"\s+", " ", body.replace("\n", " ")).strip()
-        return (f"> **{label}**\n> {line}" if label else f"> {line}")
+        return f"> **{label}**\n> {line}" if label else f"> {line}"
     if style == "points":
         items = split_numbered(body) or [body]
         return f"**{label}**\n\n" + "\n".join(f"- {x}" for x in items)
-    # section: 有 bullet 拆列表，否则散文
+    # section：有 bullet 拆列表，否则散文
     if "•" in body or "▸" in body:
         items = split_bullets(body)
         return f"**{label}**\n\n" + "\n".join(f"- {x}" for x in items)
     return f"**{label}**\n\n{body}"
+
+
+def reframe_text(raw):
+    """把一段方框/合并单元格文本重构成规范 md；元说明返回 None。"""
+    full = tidy(raw)
+    if not full or DROP_RE.match(full):
+        return None
+    for rx, label, style in LABEL_RULES:
+        m = rx.match(full)
+        if m:
+            return render_block(label, style, full[m.end():])
+    # 叙事框（如“本阶段小结”“Anthropic 的实践”）：首行若像标题就加粗，正文一并收进引用
+    head, _, rest = full.partition("\n")
+    head = head.strip()
+    rest = re.sub(r"\s+", " ", rest.replace("\n", " ")).strip()
+    if rest and len(head) <= 16 and not re.search(r"[。！？，,；;]", head):
+        return f"> **{head}**\n> {rest}"
+    return "> " + re.sub(r"\s+", " ", full.replace("\n", " ")).strip()
+
+
+def render_callout(cell):
+    return reframe_text(cell.text)
 
 
 def render_table(tbl):
@@ -123,15 +142,30 @@ def render_table(tbl):
     if not rows:
         return ""
     ncol = len(rows[0].cells)
-    def fix(cells):
-        cells = list(cells)[:ncol]
-        cells += [""] * (ncol - len(cells))
-        return cells
-    out = ["| " + " | ".join(cellmd(c) for c in fix(rows[0].cells)) + " |"]
-    out.append("| " + " | ".join(["---"] * ncol) + " |")
-    for r in rows[1:]:
-        out.append("| " + " | ".join(cellmd(c) for c in fix(r.cells)) + " |")
-    return "\n".join(out)
+
+    data, notes = [], []
+    for ri, r in enumerate(rows):
+        cells = list(r.cells)[:ncol]
+        vals = [c.text.strip() for c in cells]
+        # 整行横向合并（所有单元格同文且非空）：当作表后旁注，避免重复 N 列
+        if ri > 0 and len(set(vals)) == 1 and vals[0]:
+            notes.append(cells[0].text)
+        else:
+            data.append(cells)
+
+    def row_md(cells):
+        md = [cellmd(c) for c in cells][:ncol]
+        md += [""] * (ncol - len(md))
+        return "| " + " | ".join(md) + " |"
+
+    out = [row_md(data[0]), "| " + " | ".join(["---"] * ncol) + " |"]
+    out += [row_md(r) for r in data[1:]]
+    blocks = ["\n".join(out)]
+    for n in notes:                     # 合并行按方框规则重构（多为“高频追问”等）
+        b = reframe_text(n)
+        if b:
+            blocks.append(b)
+    return "\n\n".join(blocks)
 
 
 def convert(in_path, out_path, slug):
@@ -175,12 +209,16 @@ def convert(in_path, out_path, slug):
                 continue  # 封面区若有表格，忽略
             flush()
             tbl = Table(child, d)
-            if len(tbl.rows) == 1 and len(tbl.columns) == 1:
-                blk = render_callout(tbl.cell(0, 0))
+            if len(tbl.columns) == 1:
+                # 单列表格一律是提示框（可能多行），合并各行文本后重构
+                text = "\n".join(c.text for r in tbl.rows for c in r.cells)
+                blk = reframe_text(text)
                 if blk:
                     blocks.append(blk)
             else:
-                blocks.append(render_table(tbl))
+                blk = render_table(tbl)
+                if blk:
+                    blocks.append(blk)
             continue
 
         if tag != "p":
