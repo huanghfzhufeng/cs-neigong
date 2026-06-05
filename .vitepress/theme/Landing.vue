@@ -41,7 +41,7 @@ function onScroll() {
   })
 }
 function scrollDown() {
-  document.querySelector('.precept')?.scrollIntoView({ behavior: 'smooth' })
+  document.querySelector('.forms-sec')?.scrollIntoView({ behavior: 'smooth' })
 }
 onMounted(() => {
   document.documentElement.classList.add('home-hero')
@@ -80,23 +80,16 @@ onUnmounted(() => {
           <div class="seal" aria-hidden="true"><span>内</span><span>功</span></div>
         </div>
         <h1 class="epigraph">招式人人会，内功定高下</h1>
+        <div class="lead">
+          <p>vibe coding 时代，模型什么都能做——做得好不好，看你的内功有多深。这套手册把计算机底层一份份讲透：是什么、为什么、解决什么、怎么用。</p>
+          <p>懂了底层，你才压得住模型，而不是把垃圾越堆越高。人和模型相互成就，<b>你的上限，决定它能帮你到哪</b>。</p>
+        </div>
         <div class="actions">
           <a class="btn primary" :href="withBase('/00-导读')">开始修炼</a>
           <a class="btn ghost" :href="GH" target="_blank" rel="noreferrer">GitHub</a>
         </div>
       </div>
-      <button class="scroll-cue" @click="scrollDown" aria-label="向下">↓</button>
-    </section>
-
-    <!-- ===== 总诀（开篇） ===== -->
-    <section class="precept">
-      <div class="precept-inner reveal">
-        <span class="precept-eyebrow">总 诀</span>
-        <p>vibe coding 时代，模型什么都能做——做得好不好，看你的内功有多深。</p>
-        <p>这套手册把计算机底层一份份讲透：是什么、为什么、解决什么、怎么用。</p>
-        <p>懂了底层，你才压得住模型，而不是把垃圾越堆越高。</p>
-        <p class="precept-last">人和模型相互成就，你的上限，决定它能帮你到哪。</p>
-      </div>
+      <button class="scroll-cue" @click="scrollDown" aria-label="向下">内功九式 ↓</button>
     </section>
 
     <!-- ===== 内功九式（拳谱） ===== -->
@@ -177,16 +170,11 @@ onUnmounted(() => {
 @keyframes stamp { 0% { opacity: 0; transform: rotate(-7deg) scale(1.7); } 60% { opacity: 1; transform: rotate(-7deg) scale(0.92); } 100% { opacity: 1; transform: rotate(-7deg) scale(1); } }
 @keyframes breathe { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 
-/* ===================== 总诀 ===================== */
-.precept { background: #f2e8d2; padding: 104px 24px 88px; display: flex; justify-content: center; }
-.precept-inner { max-width: 31em; text-align: center; }
-.precept-eyebrow {
-  display: inline-block; margin-bottom: 30px; padding-bottom: 14px;
-  color: #b1542f; font-family: var(--cd-serif); font-size: 1rem; font-weight: 600; letter-spacing: 0.5em;
-  border-bottom: 1px solid #d9c9ab;
-}
-.precept p { margin: 0 0 16px; font-family: var(--cd-serif); font-size: clamp(1.06rem, 1.7vw, 1.32rem); line-height: 2.05; color: #4a4030; }
-.precept .precept-last { margin-top: 6px; color: #2a241d; }
+/* hero 宣言（首屏直出，不另开段落） */
+.lead { max-width: 33em; margin: 20px auto 0; opacity: 0; animation: fade 0.9s ease 0.85s forwards; }
+.lead p { margin: 0 0 10px; font-size: 1.05rem; line-height: 1.92; color: #5f574b; }
+.lead p:last-child { margin-bottom: 0; }
+.lead b { color: #2a241d; font-weight: 600; }
 
 /* ===================== 内功九式 ===================== */
 .forms-sec { max-width: 1180px; margin: 0 auto; padding: 86px 28px 60px; }
