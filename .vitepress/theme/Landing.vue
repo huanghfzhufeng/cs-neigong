@@ -2,18 +2,16 @@
 import { withBase } from 'vitepress'
 import { onMounted, onUnmounted } from 'vue'
 import site from '../sidebars.json'
+import heroImg from './assets/hero-cultivator.png'
 
 const GH = 'https://github.com/huanghfzhufeng/cs-neigong'
 
 function scrollDown() {
   document.querySelector('.below')?.scrollIntoView({ behavior: 'smooth' })
 }
-
-// 首页隐藏默认导航，做沉浸式扉页
 onMounted(() => document.documentElement.classList.add('home-hero'))
 onUnmounted(() => document.documentElement.classList.remove('home-hero'))
 
-// ---------- 目录：从 sidebars.json 自动构建（加新份自动出现）----------
 const DESC: Record<string, string> = {
   '01-计算机组成原理': '机器到底怎么算：CPU、cache、内存、总线',
   '02-操作系统': '硬件与应用之间的资源管理者：进程、内存、I/O',
@@ -46,10 +44,9 @@ const groups = (site.nav as any[])
 
 <template>
   <div class="landing">
-    <!-- ===== 秘籍扉页（暖纸 · 全屏 · 入场动效） ===== -->
+    <!-- ===== 秘籍扉页（暖纸 · 真插画 · 入场动效） ===== -->
     <section class="codex">
       <div class="grain"></div>
-      <div class="watermark">功</div>
 
       <header class="cx-top">
         <span class="wordmark">内功</span>
@@ -59,26 +56,26 @@ const groups = (site.nav as any[])
       <div class="cover">
         <p class="kicker rise" style="--d: 0.05s">内功心法 · 计算机底层图文详解</p>
 
-        <div class="title-wrap">
-          <h1 class="title rise" style="--d: 0.18s">内功</h1>
-          <svg class="brush" viewBox="0 0 320 26" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M6 16 C 70 7, 150 21, 220 12 S 300 9, 314 15" />
+        <div class="art">
+          <div class="art-glow"></div>
+          <svg class="enso" viewBox="0 0 200 200" aria-hidden="true">
+            <path d="M150 38 C 196 70, 196 150, 120 168 C 44 186, 8 132, 24 78 C 38 32, 96 14, 150 30" />
           </svg>
+          <img :src="heroImg" alt="内功修炼者 · 静坐运功" />
           <div class="seal" aria-hidden="true"><span>内</span><span>功</span></div>
         </div>
 
-        <p class="epigraph rise" style="--d: 0.42s">招式人人会，内功定高下。</p>
-        <p class="sub rise" style="--d: 0.56s">
+        <h1 class="epigraph rise" style="--d: 0.4s">招式人人会，内功定高下。</h1>
+        <p class="sub rise" style="--d: 0.52s">
           vibe coding 时代，模型什么都能做——做得好不好，看你的内功有多深。
         </p>
-
-        <div class="actions rise" style="--d: 0.7s">
+        <div class="actions rise" style="--d: 0.66s">
           <a class="btn primary" :href="withBase('/00-导读')">开始修炼</a>
           <a class="btn ghost" :href="GH" target="_blank" rel="noreferrer">GitHub</a>
         </div>
       </div>
 
-      <button class="scroll-cue rise" style="--d: 1.2s" @click="scrollDown">翻开目录 ↓</button>
+      <button class="scroll-cue rise" style="--d: 1.3s" @click="scrollDown">翻开目录 ↓</button>
     </section>
 
     <!-- ===== 目录（暖色） ===== -->
@@ -136,31 +133,15 @@ const groups = (site.nav as any[])
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background:
-    radial-gradient(130% 110% at 50% -10%, #faf6ec 0%, #f4ede0 58%, #ebe1d0 100%);
+  background: radial-gradient(130% 110% at 50% 0%, #fbf7ef 0%, #f6efe3 60%, #efe6d6 100%);
 }
-/* 纸纹 */
 .grain {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.45;
   mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-}
-/* 巨大“功”字水印 */
-.watermark {
-  position: absolute;
-  right: -3vmin;
-  bottom: -14vmin;
-  font-family: var(--cd-serif);
-  font-weight: 600;
-  font-size: 56vmin;
-  line-height: 1;
-  color: #3a2e22;
-  opacity: 0.04;
-  pointer-events: none;
-  user-select: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
 .cx-top {
@@ -174,86 +155,83 @@ const groups = (site.nav as any[])
   padding: 0 36px;
   z-index: 5;
 }
-.wordmark {
-  font-family: var(--cd-serif);
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #2a2620;
-  letter-spacing: 0.06em;
-}
+.wordmark { font-family: var(--cd-serif); font-size: 1.3rem; font-weight: 600; color: #2a2620; letter-spacing: 0.06em; }
 .gh { color: #6b6053; font-size: 0.9rem; font-weight: 500; }
 .gh:hover { color: #2a2620; }
 
-.cover {
+.cover { position: relative; z-index: 2; text-align: center; padding: 0 24px; max-width: 42em; }
+.kicker { margin: 0 0 18px; color: #b1542f; font-size: 0.84rem; font-weight: 600; letter-spacing: 0.22em; }
+
+/* 插画 + 落款印章 */
+.art {
+  position: relative;
+  display: inline-block;
+  margin: 0 auto 8px;
+  opacity: 0;
+  animation: reveal 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s forwards;
+}
+.art img {
   position: relative;
   z-index: 2;
-  text-align: center;
-  padding: 0 24px;
-  max-width: 40em;
-}
-.kicker {
-  margin: 0 0 26px;
-  color: #b1542f;
-  font-size: 0.84rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-}
-.title-wrap { position: relative; display: inline-block; }
-.title {
-  margin: 0;
-  font-family: var(--cd-serif);
-  font-weight: 600;
-  font-size: clamp(5rem, 17vw, 10rem);
-  line-height: 0.95;
-  letter-spacing: 0.05em;
-  color: #2a241d;
-}
-.brush {
   display: block;
-  width: 100%;
-  height: 22px;
-  margin: 6px auto 0;
+  width: clamp(260px, 32vw, 430px);
+  height: auto;
+  /* 让插画的米白底融进页面 */
+  -webkit-mask-image: radial-gradient(circle at 50% 48%, #000 60%, transparent 92%);
+  mask-image: radial-gradient(circle at 50% 48%, #000 60%, transparent 92%);
+}
+/* 背后的禅圆（enso），一笔带过 */
+.enso {
+  position: absolute;
+  inset: -10% 0 0;
+  width: 86%;
+  height: 86%;
+  left: 7%;
+  z-index: 1;
   overflow: visible;
 }
-.brush path {
+.enso path {
   fill: none;
   stroke: #c2603f;
-  stroke-width: 9;
+  stroke-width: 5;
   stroke-linecap: round;
-  stroke-dasharray: 360;
-  stroke-dashoffset: 360;
-  animation: draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-  animation-delay: 0.62s;
+  opacity: 0.16;
+  stroke-dasharray: 760;
+  stroke-dashoffset: 760;
+  animation: draw 1.4s cubic-bezier(0.6, 0, 0.2, 1) 0.5s forwards;
 }
 @keyframes draw { to { stroke-dashoffset: 0; } }
+.art-glow {
+  position: absolute;
+  inset: -6%;
+  z-index: 1;
+  background: radial-gradient(circle at 50% 46%, rgba(194, 96, 63, 0.16), transparent 64%);
+  filter: blur(18px);
+  animation: glow 5.5s ease-in-out infinite;
+}
+@keyframes glow { 0%, 100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+@keyframes reveal { from { opacity: 0; transform: scale(0.93) translateY(10px); } to { opacity: 1; transform: none; } }
 
-/* 朱红印章（白文「内功」），落款式盖章 */
 .seal {
   position: absolute;
-  top: -6%;
-  right: -86px;
-  width: clamp(58px, 7.6vw, 84px);
-  height: clamp(58px, 7.6vw, 84px);
+  right: 6%;
+  bottom: 8%;
+  z-index: 3;
+  width: clamp(40px, 5vw, 56px);
+  height: clamp(40px, 5vw, 56px);
   background: #b5362b;
-  border-radius: 9px;
+  border-radius: 7px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  box-shadow: inset 0 0 0 2px rgba(255, 244, 234, 0.18), 0 2px 10px rgba(120, 30, 24, 0.28);
+  gap: 1px;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 244, 234, 0.2), 0 2px 8px rgba(120, 30, 24, 0.3);
   transform: rotate(-7deg);
   opacity: 0;
-  animation: stamp 0.5s cubic-bezier(0.34, 1.4, 0.5, 1) forwards;
-  animation-delay: 1s;
+  animation: stamp 0.5s cubic-bezier(0.34, 1.4, 0.5, 1) 1s forwards;
 }
-.seal span {
-  font-family: var(--cd-serif);
-  font-weight: 700;
-  font-size: clamp(1.4rem, 2.6vw, 2rem);
-  line-height: 1;
-  color: #faf2e6;
-}
+.seal span { font-family: var(--cd-serif); font-weight: 700; font-size: clamp(0.95rem, 1.7vw, 1.3rem); line-height: 1; color: #faf2e6; }
 @keyframes stamp {
   0% { opacity: 0; transform: rotate(-7deg) scale(1.7); }
   60% { opacity: 1; transform: rotate(-7deg) scale(0.92); }
@@ -261,30 +239,16 @@ const groups = (site.nav as any[])
 }
 
 .epigraph {
-  margin: 30px 0 0;
+  margin: 14px 0 0;
   font-family: var(--cd-serif);
-  font-size: clamp(1.5rem, 3.4vw, 2.3rem);
-  font-weight: 500;
+  font-size: clamp(1.7rem, 4vw, 2.7rem);
+  font-weight: 600;
   color: #2a241d;
   letter-spacing: 0.04em;
 }
-.sub {
-  margin: 16px auto 0;
-  max-width: 30em;
-  font-size: 1.04rem;
-  line-height: 1.7;
-  color: #6b6053;
-}
-.actions { display: flex; gap: 14px; justify-content: center; margin-top: 38px; }
-.btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 11px 28px;
-  border-radius: 999px;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-}
+.sub { margin: 16px auto 0; max-width: 30em; font-size: 1.04rem; line-height: 1.7; color: #6b6053; }
+.actions { display: flex; gap: 14px; justify-content: center; margin-top: 34px; }
+.btn { display: inline-flex; align-items: center; padding: 11px 28px; border-radius: 999px; font-size: 1rem; font-weight: 600; transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease; }
 .btn.primary { background: #b1542f; color: #fff; }
 .btn.primary:hover { background: #c2603f; transform: translateY(-1px); }
 .btn.ghost { border: 1px solid #d8cdb9; color: #2a2620; }
@@ -292,7 +256,7 @@ const groups = (site.nav as any[])
 
 .scroll-cue {
   position: absolute;
-  bottom: 30px;
+  bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
   background: none;
@@ -305,14 +269,13 @@ const groups = (site.nav as any[])
 }
 @keyframes bob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(5px); } }
 
-/* 入场：逐层浮现 */
-.rise { opacity: 0; animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; animation-delay: var(--d, 0s); }
+.rise { opacity: 0; animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s) forwards; }
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .rise, .seal, .brush path, .scroll-cue { animation: none !important; opacity: 1 !important; }
+  .rise, .seal, .art, .scroll-cue, .enso path { animation: none !important; opacity: 1 !important; }
   .seal { transform: rotate(-7deg); }
-  .brush path { stroke-dashoffset: 0; }
+  .enso path { stroke-dashoffset: 0; opacity: 0.16; }
 }
 
 /* ===================== 目录（暖色） ===================== */
@@ -346,8 +309,5 @@ const groups = (site.nav as any[])
 .hcol h4 { margin: 0 0 8px; font-size: 1.05rem; font-weight: 600; color: var(--vp-c-brand-1); }
 .hcol p { margin: 0; font-size: 0.96rem; line-height: 1.7; color: var(--vp-c-text-2); }
 
-@media (max-width: 640px) {
-  .seal { right: -12px; top: -52px; }
-  .below { padding: 56px 20px 72px; }
-}
+@media (max-width: 640px) { .below { padding: 56px 20px 72px; } }
 </style>
