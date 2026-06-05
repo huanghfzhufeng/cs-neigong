@@ -1,66 +1,65 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress'
+import site from '../sidebars.json'
 
-const groups = [
-  {
-    title: '地基',
-    desc: '机器与数据怎么运转——其余一切的底层支撑',
-    items: [
-      { no: '01', title: '计算机组成原理', desc: '机器到底怎么算：CPU、cache、内存、总线', link: '/01-计算机组成原理' },
-      { no: '04', title: '数据结构与算法', desc: '数据怎么存、问题怎么高效解', link: '/04-数据结构与算法' },
-    ],
-  },
-  {
-    title: '运行与连接',
-    desc: '程序怎么跑、请求怎么到',
-    items: [
-      { no: '02', title: '操作系统', desc: '硬件与应用之间的资源管理者：进程、内存、I/O', link: '/02-操作系统' },
-      { no: '03', title: '计算机网络', desc: '数据怎么跨机器送达：TCP/IP、HTTP、HTTPS', link: '/03-计算机网络' },
-    ],
-  },
-  {
-    title: '数据与架构',
-    desc: '怎么可靠存取、怎么扛住流量',
-    items: [
-      { no: '05', title: 'MySQL', desc: '索引、事务、锁、日志', link: '/05-MySQL' },
-      { no: '06', title: '互联网架构演进', desc: '从单机到分布式，一步步扛住流量', link: '/06-互联网架构演进' },
-    ],
-  },
-  {
-    title: '方法与上层',
-    desc: '怎么把事做对、怎么用好模型',
-    items: [
-      { no: '07', title: '系统质量属性与架构评估', desc: '用“质量属性”的语言谈架构与权衡', link: '/07-系统质量属性与架构评估' },
-      { no: '08', title: '软件工程', desc: '把事做对、做稳的方法论', link: '/08-软件工程' },
-      { no: '09', title: 'LLM 与 Agent 工程', desc: '怎么用模型把活干好——元能力', link: '/09-LLM与Agent工程' },
-    ],
-  },
-]
+// 每份的一句话描述（按 slug）。加新份时在这里补一句即可；结构本身从 sidebars.json 自动同步。
+const DESC: Record<string, string> = {
+  '01-计算机组成原理': '机器到底怎么算：CPU、cache、内存、总线',
+  '02-操作系统': '硬件与应用之间的资源管理者：进程、内存、I/O',
+  '03-计算机网络': '数据怎么跨机器送达：TCP/IP、HTTP、HTTPS',
+  '04-数据结构与算法': '数据怎么存、问题怎么高效解',
+  '05-MySQL': '索引、事务、锁、日志——数据怎么可靠存取',
+  '06-互联网架构演进': '从单机到分布式，一步步扛住流量',
+  '07-系统质量属性与架构评估': '用“质量属性”的语言谈架构与权衡',
+  '08-软件工程': '把事做对、做稳的方法论',
+  '09-LLM与Agent工程': '怎么用模型把活干好——元能力',
+}
+const GROUP_DESC: Record<string, string> = {
+  '地基': '机器与数据怎么运转——其余一切的底层支撑',
+  '运行与连接': '程序怎么跑、请求怎么到',
+  '数据与架构': '怎么可靠存取、怎么扛住流量',
+  '方法与上层': '怎么把事做对、怎么用好模型',
+}
+
+// 从 sidebars.json 的导航自动构建分组卡片：新增一份会自动出现在首页
+const groups = (site.nav as any[])
+  .filter((n) => Array.isArray(n.items))
+  .map((g) => ({
+    title: g.text as string,
+    desc: GROUP_DESC[g.text] ?? '',
+    items: (g.items as any[]).map((it) => {
+      const [no, title] = (it.text as string).split(' · ')
+      const slug = (it.link as string).replace(/\//g, '')
+      return { no, title: title ?? it.text, desc: DESC[slug] ?? '', link: it.link as string }
+    }),
+  }))
 
 const chain = ['计算机网络', '操作系统', '互联网架构', 'MySQL']
 </script>
 
 <template>
   <div class="landing">
-    <!-- Hero -->
+    <!-- Hero：内功 -->
     <section class="hero">
-      <p class="kicker">计算机基础 · 图文详解</p>
-      <h1>不为面试，<br />为真懂。</h1>
-      <p class="sub">九份图文详解，把计算机基础讲透——是什么、为什么、解决什么、怎么用。</p>
+      <p class="kicker">计算机底层 · 图文详解</p>
+      <h1>招式人人会，<br />内功定高下。</h1>
+      <p class="sub">
+        vibe coding 时代，模型什么都能做——做得好不好，看你的内功有多深。这套手册把计算机底层一份份讲透：是什么、为什么、解决什么、怎么用。
+      </p>
       <p class="why">
-        懂了这些，vibe coding 时你才压得住模型，而不是把垃圾越堆越高。<br />
-        人和模型是相互的，你的上限决定它能帮你到哪。
+        懂了底层，你才压得住模型，而不是把垃圾越堆越高。<br />
+        人和模型相互成就，你的上限，决定它能帮你到哪。
       </p>
       <div class="actions">
         <a class="btn primary" :href="withBase('/00-导读')">从导读开始</a>
-        <a class="btn ghost" :href="withBase('/01-计算机组成原理')">随便翻一份</a>
+        <a class="btn ghost" :href="withBase('/01-计算机组成原理/')">随便翻一份</a>
       </div>
     </section>
 
-    <!-- Hook：九份是一个整体 -->
+    <!-- Hook：底层是一个整体 -->
     <section class="hook">
-      <h2>九份不是九个孤岛</h2>
-      <p class="hook-lead">在浏览器敲下回车、到看见页面，这一瞬数据穿过了大半本手册：</p>
+      <h2>底层不是一个个孤岛</h2>
+      <p class="hook-lead">在浏览器敲下回车、到看见页面，这一瞬数据穿过了大半套手册：</p>
       <div class="chain">
         <template v-for="(c, i) in chain" :key="c">
           <span class="node">{{ c }}</span>
@@ -72,8 +71,9 @@ const chain = ['计算机网络', '操作系统', '互联网架构', 'MySQL']
       </p>
     </section>
 
-    <!-- 九份，按学习路径分组 -->
+    <!-- 目录：按内功的层次铺开 -->
     <section class="catalog">
+      <p class="catalog-intro">按内功的层次铺开，持续增加：</p>
       <div v-for="g in groups" :key="g.title" class="group">
         <div class="group-head">
           <h3>{{ g.title }}</h3>
@@ -102,7 +102,7 @@ const chain = ['计算机网络', '操作系统', '互联网架构', 'MySQL']
           <p>写代码时冒出疑问，右上角搜索（⌘K），秒级跳到那个点。</p>
         </div>
         <div class="hcol">
-          <h4>当手册</h4>
+          <h4>炼内功</h4>
           <p>每章末「放到 vibe coding 里」把知识连到“怎么判断模型给的对不对”。</p>
         </div>
       </div>
@@ -134,15 +134,15 @@ const chain = ['计算机网络', '操作系统', '互联网架构', 'MySQL']
   font-family: var(--cd-serif);
   font-weight: 600;
   font-size: clamp(2.8rem, 6.5vw, 4.6rem);
-  line-height: 1.04;
+  line-height: 1.06;
   letter-spacing: -0.01em;
   color: var(--vp-c-text-1);
 }
 .hero .sub {
   margin: 28px 0 0;
-  max-width: 30em;
-  font-size: 1.32rem;
-  line-height: 1.5;
+  max-width: 34em;
+  font-size: 1.26rem;
+  line-height: 1.55;
   color: var(--vp-c-text-1);
 }
 .hero .why {
@@ -236,6 +236,12 @@ const chain = ['计算机网络', '操作系统', '互联网架构', 'MySQL']
 /* ---------- 目录分组 ---------- */
 .catalog {
   padding: 56px 0 20px;
+}
+.catalog-intro {
+  margin: 0 0 26px;
+  color: var(--vp-c-text-3);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
 }
 .group {
   margin-bottom: 44px;

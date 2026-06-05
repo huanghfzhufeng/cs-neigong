@@ -1,4 +1,6 @@
 import { defineConfig } from 'vitepress'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 
 // 给「一句话讲透 / 放到 vibe coding 里」这类引用块打上 class，便于差异化样式。
 const CALLOUTS: Record<string, string> = {
@@ -22,24 +24,15 @@ function calloutPlugin(md: any) {
   })
 }
 
-// 单一事实来源：文件名 → 侧栏/导航标题
-const ORDER: [string, string][] = [
-  ['00-导读', '导读 · 把九份连成一张网'],
-  ['01-计算机组成原理', '01 · 计算机组成原理'],
-  ['02-操作系统', '02 · 操作系统'],
-  ['03-计算机网络', '03 · 计算机网络'],
-  ['04-数据结构与算法', '04 · 数据结构与算法'],
-  ['05-MySQL', '05 · MySQL'],
-  ['06-互联网架构演进', '06 · 互联网架构演进'],
-  ['07-系统质量属性与架构评估', '07 · 系统质量属性与架构评估'],
-  ['08-软件工程', '08 · 软件工程'],
-  ['09-LLM与Agent工程', '09 · LLM 与 Agent 工程'],
-]
+// 侧栏与顶部导航：由 tools/split_build.py 生成（单一事实来源；加新份不用改这里）
+const navSidebar = JSON.parse(
+  readFileSync(fileURLToPath(new URL('./sidebars.json', import.meta.url)), 'utf-8'),
+) as { sidebars: Record<string, unknown>; nav: unknown[] }
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: '计算机基础 · 真懂手册',
-  description: '不是为了面试，是为了真懂——是什么、为什么、解决什么、怎么用。懂了这些，vibe coding 时你才压得住模型。',
+  title: '内功',
+  description: '招式人人会，内功定高下。vibe coding 时代，懂底层原理是你压住模型、决定上限的内功。',
   base: '/cs-neigong/',
   srcExclude: ['README.md'],
   ignoreDeadLinks: true,
@@ -52,17 +45,8 @@ export default defineConfig({
     ['meta', { name: 'theme-color', content: '#c2603f' }],
   ],
   themeConfig: {
-    nav: [
-      { text: '首页', link: '/' },
-      { text: '导读', link: '/00-导读' },
-      { text: '九份详解', items: ORDER.slice(1).map(([f, t]) => ({ text: t, link: `/${f}` })) },
-    ],
-    sidebar: [
-      {
-        text: '计算机基础 · 真懂手册',
-        items: ORDER.map(([f, t]) => ({ text: t, link: `/${f}` })),
-      },
-    ],
+    nav: [{ text: '首页', link: '/' }, ...(navSidebar.nav as any[])],
+    sidebar: navSidebar.sidebars as any,
     outline: { level: [2, 3], label: '本页章节' },
     search: {
       provider: 'local',
@@ -88,8 +72,8 @@ export default defineConfig({
     lastUpdatedText: '最后更新于',
     socialLinks: [{ icon: 'github', link: 'https://github.com/huanghfzhufeng/cs-neigong' }],
     footer: {
-      message: '为真懂而做 · 不是为了面试',
-      copyright: '内容为个人学习笔记，持续打磨',
+      message: '招式人人会，内功定高下',
+      copyright: '计算机底层 · vibe coding 时代的内功 · 持续增加',
     },
   },
   markdown: {

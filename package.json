@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "计算机基础 · 真懂手册",
+  "description": "内功 · 计算机底层图文详解",
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
