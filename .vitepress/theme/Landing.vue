@@ -176,7 +176,8 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: radial-gradient(120% 95% at 50% 32%, #f8f0de 0%, #f2e8d2 52%, #e9dcc2 100%);
+  justify-content: center;
+  background: radial-gradient(115% 90% at 50% 42%, #f8f0de 0%, #f2e8d2 54%, #e7d9be 100%);
 }
 .grain {
   position: absolute; inset: 0; pointer-events: none; opacity: 0.4; mix-blend-mode: multiply;
@@ -187,7 +188,7 @@ onUnmounted(() => {
 .gh { color: #6b6053; font-size: 0.9rem; font-weight: 500; }
 .gh:hover { color: #2a2620; }
 
-.stage { position: relative; width: min(90vw, 70vh, 700px); height: min(90vw, 70vh, 700px); margin: auto; flex: none; }
+.stage { position: relative; width: min(94vw, 78vh, 880px); height: min(94vw, 78vh, 880px); margin: 0 auto; flex: none; }
 .rings { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .rings circle { fill: none; stroke: #b98a63; }
 .r-out { stroke-width: 0.25; opacity: 0.35; stroke-dasharray: 1.6 2.4; transform-origin: 50% 50%; animation: spin 160s linear infinite; }
@@ -230,7 +231,7 @@ onUnmounted(() => {
 .elabel { font-size: clamp(0.74rem, 1.5vw, 0.95rem); font-weight: 600; color: #4a4034; white-space: nowrap; }
 .emblem:hover .elabel { color: #b1542f; }
 
-.hero-foot { position: relative; z-index: 4; text-align: center; padding-bottom: 56px; opacity: 0; animation: fade 0.9s ease 1.3s forwards; }
+.hero-foot { position: relative; z-index: 4; text-align: center; margin-top: 18px; opacity: 0; animation: fade 0.9s ease 1.3s forwards; }
 .tagline { margin: 0; font-family: var(--cd-serif); font-size: clamp(1.5rem, 3.4vw, 2.2rem); font-weight: 600; color: #2a241d; letter-spacing: 0.05em; }
 .subline { margin: 10px 0 0; font-size: 0.98rem; color: #6b6053; }
 .actions { display: flex; gap: 14px; justify-content: center; margin-top: 24px; }
