@@ -9,11 +9,25 @@ import os
 
 os.chdir(os.path.join(os.path.dirname(__file__), ".."))
 P = "<!-- VIBE-INTRO -->"
+LEAD_P = "<!-- LEAD -->"
 
 
 def note(t: str) -> str:
     return f"> **放到 vibe coding 里**　{t}"
 
+
+# 标题下的一句话导言（替换原“覆盖：…”长列表）：这份讲什么，一句带过
+LEAD: dict[str, str] = {
+    "01-计算机组成原理.md": "讲清机器到底怎么算——CPU、cache、内存、总线，是“为什么这段代码更快、更省”的根。",
+    "02-操作系统.md": "操作系统怎么管理硬件、调度程序、扛住高并发：进程、内存、I/O 多路复用。",
+    "03-计算机网络.md": "数据怎么跨机器可靠送达：TCP/IP、HTTP、HTTPS，以及“为什么超时、为什么丢包”。",
+    "04-数据结构与算法.md": "数据怎么存、问题怎么高效解——复杂度、各种结构，到四大算法范式。",
+    "05-MySQL.md": "数据怎么可靠存取：索引为什么快、事务怎么不出错、日志怎么不丢数据。",
+    "06-互联网架构演进.md": "系统怎么从单机一步步长成扛得住流量的分布式，每一步解决什么、代价是什么。",
+    "07-系统质量属性与架构评估.md": "怎么用“质量属性”的语言谈架构——性能、可用性、可修改性、安全性之间的权衡。",
+    "08-软件工程.md": "怎么把软件做对、做稳：需求、设计、测试、维护的方法论。",
+    "09-LLM与Agent工程.md": "怎么用 LLM 和 Agent 把活干好——从“会用”走到“会设计、会控”。",
+}
 
 INTRO: dict[str, str] = {}
 NOTES: dict[str, list[tuple[str, str]]] = {}
@@ -167,14 +181,16 @@ def main() -> None:
     for fn, intro in INTRO.items():
         with open(fn, encoding="utf-8") as f:
             s = f.read()
+        assert LEAD_P in s, f"{fn} 缺占位符 {LEAD_P}"
         assert P in s, f"{fn} 缺占位符 {P}"
+        s = s.replace(LEAD_P, LEAD[fn], 1)
         s = s.replace(P, intro, 1)
         for anchor, n in NOTES.get(fn, []):
             assert anchor in s, f"{fn} 找不到锚点: {anchor}"
             s = s.replace(anchor, n + "\n\n" + anchor, 1)
         with open(fn, "w", encoding="utf-8") as f:
             f.write(s)
-        print(f"注入 {fn}：总览段 + {len(NOTES.get(fn, []))} 条章末注")
+        print(f"注入 {fn}：导言 + vibe 段（引言后）+ {len(NOTES.get(fn, []))} 条章末注")
     print("完成")
 
 

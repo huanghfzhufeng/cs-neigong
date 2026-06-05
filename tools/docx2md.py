@@ -269,18 +269,23 @@ def convert(in_path, out_path, slug):
     flush()
 
     # --- 组装 ---
-    md = [f"# {cover_title or slug}"]
-    if cover_scope:
-        scope = cover_scope.split("覆盖", 1)[-1].lstrip(":：").strip()
-        md.append(f"**覆盖**：{scope}")
-    md.append("<!-- VIBE-INTRO -->")   # 人工补「把它用在 vibe coding 上」
-    for b in blocks:
+    # 第二个 ## 标题 = 第一个正式章节（第一个是引言）。vibe 段放它之前 → 即引言之后。
+    heads = [i for i, b in enumerate(blocks)
+             if isinstance(b, str) and b.startswith("## ")]
+    vibe_at = heads[1] if len(heads) >= 2 else len(blocks)
+
+    md = [f"# {cover_title or slug}", "<!-- LEAD -->"]  # LEAD 由注入脚本填一句话导言
+    for i, b in enumerate(blocks):
+        if i == vibe_at:
+            md.append("<!-- VIBE-INTRO -->")  # 人工补「把它用在 vibe coding 上」
         if isinstance(b, list):
             md.append(f"![{b[2]}]({b[1]})")
         elif is_label(b):
             md.append(f"**{b}**")
         else:
             md.append(b)
+    if vibe_at >= len(blocks):
+        md.append("<!-- VIBE-INTRO -->")
 
     out = "\n\n".join(md) + "\n"
     out = re.sub(r"\n{3,}", "\n\n", out)

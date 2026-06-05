@@ -1,11 +1,16 @@
 import DefaultTheme from 'vitepress/theme'
+import type { App } from 'vue'
 import { onMounted, watch, nextTick } from 'vue'
 import { useRoute } from 'vitepress'
 import mediumZoom from 'medium-zoom'
+import Landing from './Landing.vue'
 import './custom.css'
 
 export default {
   extends: DefaultTheme,
+  enhanceApp({ app }: { app: App }) {
+    app.component('Landing', Landing)
+  },
   setup() {
     const route = useRoute()
     let zoom: ReturnType<typeof mediumZoom> | undefined
