@@ -1,130 +1,144 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress'
-import { onMounted, onUnmounted } from 'vue'
-import site from '../sidebars.json'
-import heroImg from './assets/hero-cultivator.png'
+import { onMounted, onUnmounted, ref } from 'vue'
+import heroImg from './assets/hero-a.png'
+import brush from './assets/d-brush.png'
+import mountains from './assets/d-mountains.png'
+import t01 from './assets/t-01.png'
+import t02 from './assets/t-02.png'
+import t03 from './assets/t-03.png'
+import t04 from './assets/t-04.png'
+import t05 from './assets/t-05.png'
+import t06 from './assets/t-06.png'
+import t07 from './assets/t-07.png'
+import t08 from './assets/t-08.png'
+import t09 from './assets/t-09.png'
 
 const GH = 'https://github.com/huanghfzhufeng/cs-neigong'
 
-function scrollDown() {
-  document.querySelector('.below')?.scrollIntoView({ behavior: 'smooth' })
-}
-onMounted(() => document.documentElement.classList.add('home-hero'))
-onUnmounted(() => document.documentElement.classList.remove('home-hero'))
+const tiles = [
+  { no: '01', name: '计算机组成原理', desc: '机器到底怎么算', link: '/01-计算机组成原理/', img: t01 },
+  { no: '02', name: '操作系统', desc: '资源怎么调度', link: '/02-操作系统/', img: t02 },
+  { no: '03', name: '计算机网络', desc: '数据怎么跨机器送达', link: '/03-计算机网络/', img: t03 },
+  { no: '04', name: '数据结构与算法', desc: '怎么存、怎么高效解', link: '/04-数据结构与算法/', img: t04 },
+  { no: '05', name: 'MySQL', desc: '怎么可靠存取', link: '/05-MySQL/', img: t05 },
+  { no: '06', name: '互联网架构演进', desc: '怎么扛住流量', link: '/06-互联网架构演进/', img: t06 },
+  { no: '07', name: '系统质量属性与架构评估', desc: '怎么权衡好坏', link: '/07-系统质量属性与架构评估/', img: t07 },
+  { no: '08', name: '软件工程', desc: '怎么把事做对', link: '/08-软件工程/', img: t08 },
+  { no: '09', name: 'LLM 与 Agent 工程', desc: '怎么用模型把活干好', link: '/09-LLM与Agent工程/', img: t09 },
+]
 
-const DESC: Record<string, string> = {
-  '01-计算机组成原理': '机器到底怎么算：CPU、cache、内存、总线',
-  '02-操作系统': '硬件与应用之间的资源管理者：进程、内存、I/O',
-  '03-计算机网络': '数据怎么跨机器送达：TCP/IP、HTTP、HTTPS',
-  '04-数据结构与算法': '数据怎么存、问题怎么高效解',
-  '05-MySQL': '索引、事务、锁、日志——数据怎么可靠存取',
-  '06-互联网架构演进': '从单机到分布式，一步步扛住流量',
-  '07-系统质量属性与架构评估': '用“质量属性”的语言谈架构与权衡',
-  '08-软件工程': '把事做对、做稳的方法论',
-  '09-LLM与Agent工程': '怎么用模型把活干好——元能力',
+const mountainsEl = ref<HTMLElement>()
+let io: IntersectionObserver | undefined
+let raf = 0
+function onScroll() {
+  cancelAnimationFrame(raf)
+  raf = requestAnimationFrame(() => {
+    const el = mountainsEl.value
+    if (el) {
+      const r = el.getBoundingClientRect()
+      const off = (window.innerHeight - r.top) * 0.06
+      el.style.setProperty('--py', `${off.toFixed(1)}px`)
+    }
+  })
 }
-const GROUP_DESC: Record<string, string> = {
-  '地基': '机器与数据怎么运转——其余一切的底层支撑',
-  '运行与连接': '程序怎么跑、请求怎么到',
-  '数据与架构': '怎么可靠存取、怎么扛住流量',
-  '方法与上层': '怎么把事做对、怎么用好模型',
+function scrollDown() {
+  document.querySelector('.scroll-target')?.scrollIntoView({ behavior: 'smooth' })
 }
-const groups = (site.nav as any[])
-  .filter((n) => Array.isArray(n.items))
-  .map((g) => ({
-    title: g.text as string,
-    desc: GROUP_DESC[g.text] ?? '',
-    items: (g.items as any[]).map((it) => {
-      const [no, title] = (it.text as string).split(' · ')
-      const slug = (it.link as string).replace(/\//g, '')
-      return { no, title: title ?? it.text, desc: DESC[slug] ?? '', link: it.link as string }
-    }),
-  }))
+
+onMounted(() => {
+  document.documentElement.classList.add('home-hero')
+  io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in')
+          io!.unobserve(e.target)
+        }
+      }),
+    { threshold: 0.16 },
+  )
+  document.querySelectorAll('.reveal').forEach((el) => io!.observe(el))
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
+})
+onUnmounted(() => {
+  document.documentElement.classList.remove('home-hero')
+  io?.disconnect()
+  window.removeEventListener('scroll', onScroll)
+  cancelAnimationFrame(raf)
+})
 </script>
 
 <template>
   <div class="landing">
-    <!-- ===== 秘籍扉页（暖纸 · 真插画 · 入场动效） ===== -->
+    <!-- ===== 扉页 ===== -->
     <section class="codex">
       <div class="grain"></div>
-
       <header class="cx-top">
         <span class="wordmark">内功</span>
         <a class="gh" :href="GH" target="_blank" rel="noreferrer">GitHub</a>
       </header>
 
       <div class="cover">
-        <p class="kicker rise" style="--d: 0.05s">内功心法 · 计算机底层图文详解</p>
-
         <div class="art">
           <div class="art-glow"></div>
-          <svg class="enso" viewBox="0 0 200 200" aria-hidden="true">
-            <path d="M150 38 C 196 70, 196 150, 120 168 C 44 186, 8 132, 24 78 C 38 32, 96 14, 150 30" />
-          </svg>
-          <img :src="heroImg" alt="内功修炼者 · 静坐运功" />
+          <img :src="heroImg" alt="武者于山中静坐运功" />
           <div class="seal" aria-hidden="true"><span>内</span><span>功</span></div>
         </div>
 
-        <h1 class="epigraph rise" style="--d: 0.4s">招式人人会，内功定高下。</h1>
-        <p class="sub rise" style="--d: 0.52s">
-          vibe coding 时代，模型什么都能做——做得好不好，看你的内功有多深。
-        </p>
-        <div class="actions rise" style="--d: 0.66s">
+        <h1 class="epigraph">招式人人会，内功定高下。</h1>
+        <img class="ul" :src="brush" alt="" aria-hidden="true" />
+        <p class="sub">模型什么都能做——做得好不好，看你的内功有多深。</p>
+
+        <div class="actions">
           <a class="btn primary" :href="withBase('/00-导读')">开始修炼</a>
           <a class="btn ghost" :href="GH" target="_blank" rel="noreferrer">GitHub</a>
         </div>
       </div>
 
-      <button class="scroll-cue rise" style="--d: 1.3s" @click="scrollDown">翻开目录 ↓</button>
+      <button class="scroll-cue" @click="scrollDown" aria-label="向下">↓</button>
     </section>
 
-    <!-- ===== 目录（暖色） ===== -->
-    <div class="below">
-      <section class="hook">
-        <h2>九份，不是九本互不相干的册子</h2>
-        <p class="hook-lead">在浏览器敲下回车、到看见页面，这一瞬数据穿过了大半套心法：</p>
-        <div class="chain">
-          <span class="node">计算机网络</span><i class="arrow">→</i>
-          <span class="node">操作系统</span><i class="arrow">→</i>
-          <span class="node">互联网架构</span><i class="arrow">→</i>
-          <span class="node">MySQL</span>
-        </div>
-        <p class="hook-foot">
-          底下垫着 <b>数据结构</b> 与 <b>计算机组成原理</b>。<a :href="withBase('/00-导读')">看这条脉络怎么贯通 →</a>
-        </p>
-      </section>
+    <span class="scroll-target"></span>
 
-      <section class="catalog">
-        <p class="catalog-intro">循序修炼，按内功的层次铺开（持续增加）：</p>
-        <div v-for="g in groups" :key="g.title" class="group">
-          <div class="group-head">
-            <h3>{{ g.title }}</h3>
-            <span class="group-desc">{{ g.desc }}</span>
+    <!-- ===== 九门内功（图为主） ===== -->
+    <section class="dojo">
+      <div class="dojo-head reveal">
+        <h2>九门内功</h2>
+        <p>循序修炼，由内而外 · 持续增补</p>
+      </div>
+      <div class="grid">
+        <a
+          v-for="(t, i) in tiles"
+          :key="t.no"
+          class="tile reveal"
+          :style="{ '--i': i }"
+          :href="withBase(t.link)"
+        >
+          <div class="tile-img"><img :src="t.img" :alt="t.name" loading="lazy" /></div>
+          <div class="tile-cap">
+            <span class="tn">{{ t.no }}</span>
+            <span class="tt">{{ t.name }}</span>
+            <span class="td">{{ t.desc }}</span>
           </div>
-          <div class="cards">
-            <a v-for="c in g.items" :key="c.no" class="card" :href="withBase(c.link)">
-              <span class="no">{{ c.no }}</span>
-              <span class="ct">{{ c.title }}</span>
-              <span class="cd">{{ c.desc }}</span>
-            </a>
-          </div>
-        </div>
-      </section>
+        </a>
+      </div>
+    </section>
 
-      <section class="howto">
-        <h2>怎么修炼这套</h2>
-        <div class="hcols">
-          <div class="hcol"><h4>通读</h4><p>第一遍按顺序读，重点是每个“为什么”和每张图。</p></div>
-          <div class="hcol"><h4>速查</h4><p>写代码时冒出疑问，搜索（⌘K）秒级翻到那一页。</p></div>
-          <div class="hcol"><h4>炼内功</h4><p>每章末「放到 vibe coding 里」把知识连到“怎么判断模型给的对不对”。</p></div>
-        </div>
-      </section>
+    <!-- ===== 远山（视差） ===== -->
+    <div class="range" ref="mountainsEl">
+      <img :src="mountains" alt="" aria-hidden="true" />
+      <div class="range-words reveal">
+        <p>九份是一块块砖，连起来才是一套体系。</p>
+        <a :href="withBase('/00-导读')">看脉络怎么贯通 →</a>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* ===================== 秘籍扉页 ===================== */
+/* ===================== 扉页 ===================== */
 .codex {
   position: relative;
   min-height: 100vh;
@@ -133,8 +147,9 @@ const groups = (site.nav as any[])
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(130% 110% at 50% 0%, #fbf7ef 0%, #f6efe3 60%, #efe6d6 100%);
+  background: radial-gradient(120% 100% at 50% 28%, #f7efdc 0%, #f2e8d2 55%, #ece0c6 100%);
 }
+.landing { background: #f2e8d2; }
 .grain {
   position: absolute;
   inset: 0;
@@ -143,7 +158,6 @@ const groups = (site.nav as any[])
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 }
-
 .cx-top {
   position: absolute;
   top: 24px;
@@ -159,79 +173,53 @@ const groups = (site.nav as any[])
 .gh { color: #6b6053; font-size: 0.9rem; font-weight: 500; }
 .gh:hover { color: #2a2620; }
 
-.cover { position: relative; z-index: 2; text-align: center; padding: 0 24px; max-width: 42em; }
-.kicker { margin: 0 0 18px; color: #b1542f; font-size: 0.84rem; font-weight: 600; letter-spacing: 0.22em; }
+.cover { position: relative; z-index: 2; text-align: center; padding: 0 24px; max-width: 44em; }
 
-/* 插画 + 落款印章 */
-.art {
-  position: relative;
-  display: inline-block;
-  margin: 0 auto 8px;
-  opacity: 0;
-  animation: reveal 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s forwards;
-}
+/* 主插画：墨色“显影”入场 + 边缘融入纸面 */
+.art { position: relative; display: inline-block; margin: 0 auto; }
 .art img {
   position: relative;
   z-index: 2;
   display: block;
-  width: clamp(260px, 32vw, 430px);
+  width: clamp(280px, 38vw, 480px);
   height: auto;
-  /* 让插画的米白底融进页面 */
-  -webkit-mask-image: radial-gradient(circle at 50% 48%, #000 60%, transparent 92%);
-  mask-image: radial-gradient(circle at 50% 48%, #000 60%, transparent 92%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 72%, transparent 97%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 72%, transparent 97%);
+  animation: develop 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s both;
 }
-/* 背后的禅圆（enso），一笔带过 */
-.enso {
-  position: absolute;
-  inset: -10% 0 0;
-  width: 86%;
-  height: 86%;
-  left: 7%;
-  z-index: 1;
-  overflow: visible;
+@keyframes develop {
+  from { opacity: 0; transform: scale(0.94); filter: blur(12px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
 }
-.enso path {
-  fill: none;
-  stroke: #c2603f;
-  stroke-width: 5;
-  stroke-linecap: round;
-  opacity: 0.16;
-  stroke-dasharray: 760;
-  stroke-dashoffset: 760;
-  animation: draw 1.4s cubic-bezier(0.6, 0, 0.2, 1) 0.5s forwards;
-}
-@keyframes draw { to { stroke-dashoffset: 0; } }
 .art-glow {
   position: absolute;
-  inset: -6%;
+  inset: 4%;
   z-index: 1;
-  background: radial-gradient(circle at 50% 46%, rgba(194, 96, 63, 0.16), transparent 64%);
-  filter: blur(18px);
-  animation: glow 5.5s ease-in-out infinite;
+  background: radial-gradient(circle at 50% 46%, rgba(194, 96, 63, 0.14), transparent 62%);
+  filter: blur(20px);
+  animation: glow 6s ease-in-out infinite;
 }
-@keyframes glow { 0%, 100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
-@keyframes reveal { from { opacity: 0; transform: scale(0.93) translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes glow { 0%, 100% { opacity: 0.8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.04); } }
 
 .seal {
   position: absolute;
-  right: 6%;
-  bottom: 8%;
+  right: 9%;
+  bottom: 7%;
   z-index: 3;
-  width: clamp(40px, 5vw, 56px);
-  height: clamp(40px, 5vw, 56px);
+  width: clamp(42px, 5vw, 58px);
+  height: clamp(42px, 5vw, 58px);
   background: #b5362b;
   border-radius: 7px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
   box-shadow: inset 0 0 0 1.5px rgba(255, 244, 234, 0.2), 0 2px 8px rgba(120, 30, 24, 0.3);
   transform: rotate(-7deg);
   opacity: 0;
-  animation: stamp 0.5s cubic-bezier(0.34, 1.4, 0.5, 1) 1s forwards;
+  animation: stamp 0.5s cubic-bezier(0.34, 1.4, 0.5, 1) 1.4s forwards;
 }
-.seal span { font-family: var(--cd-serif); font-weight: 700; font-size: clamp(0.95rem, 1.7vw, 1.3rem); line-height: 1; color: #faf2e6; }
+.seal span { font-family: var(--cd-serif); font-weight: 700; font-size: clamp(1rem, 1.7vw, 1.35rem); line-height: 1.02; color: #faf2e6; }
 @keyframes stamp {
   0% { opacity: 0; transform: rotate(-7deg) scale(1.7); }
   60% { opacity: 1; transform: rotate(-7deg) scale(0.92); }
@@ -239,15 +227,29 @@ const groups = (site.nav as any[])
 }
 
 .epigraph {
-  margin: 14px 0 0;
+  margin: 6px 0 0;
   font-family: var(--cd-serif);
-  font-size: clamp(1.7rem, 4vw, 2.7rem);
+  font-size: clamp(1.8rem, 4.2vw, 2.9rem);
   font-weight: 600;
   color: #2a241d;
   letter-spacing: 0.04em;
+  opacity: 0;
+  animation: fade 0.9s ease 0.7s forwards;
 }
-.sub { margin: 16px auto 0; max-width: 30em; font-size: 1.04rem; line-height: 1.7; color: #6b6053; }
-.actions { display: flex; gap: 14px; justify-content: center; margin-top: 34px; }
+/* 毛笔下划线：从左到右“画”出来 */
+.ul {
+  display: block;
+  width: clamp(200px, 28vw, 320px);
+  height: auto;
+  margin: -2px auto 0;
+  clip-path: inset(0 100% 0 0);
+  animation: wipe 0.9s cubic-bezier(0.65, 0, 0.35, 1) 1s forwards;
+}
+@keyframes wipe { to { clip-path: inset(0 0 0 0); } }
+.sub { margin: 14px auto 0; max-width: 28em; font-size: 1.02rem; color: #6b6053; opacity: 0; animation: fade 0.9s ease 1.1s forwards; }
+.actions { display: flex; gap: 14px; justify-content: center; margin-top: 30px; opacity: 0; animation: fade 0.9s ease 1.3s forwards; }
+@keyframes fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
 .btn { display: inline-flex; align-items: center; padding: 11px 28px; border-radius: 999px; font-size: 1rem; font-weight: 600; transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease; }
 .btn.primary { background: #b1542f; color: #fff; }
 .btn.primary:hover { background: #c2603f; transform: translateY(-1px); }
@@ -256,58 +258,61 @@ const groups = (site.nav as any[])
 
 .scroll-cue {
   position: absolute;
-  bottom: 28px;
+  bottom: 26px;
   left: 50%;
   transform: translateX(-50%);
   background: none;
   border: none;
-  color: #8a8073;
-  font-size: 0.86rem;
-  letter-spacing: 0.12em;
+  color: #a89c8a;
+  font-size: 1.3rem;
   cursor: pointer;
-  animation: bob 2.2s ease-in-out infinite;
+  opacity: 0;
+  animation: fade 1s ease 1.8s forwards, breathe 2.6s ease-in-out 2.4s infinite;
 }
-@keyframes bob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(5px); } }
+@keyframes breathe { 0%, 100% { opacity: 0.45; } 50% { opacity: 0.9; } }
 
-.rise { opacity: 0; animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s) forwards; }
-@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+/* ===================== 九门内功 ===================== */
+.dojo { max-width: 1140px; margin: 0 auto; padding: 96px 28px 40px; }
+.dojo-head { text-align: center; margin-bottom: 42px; }
+.dojo-head h2 { margin: 0; font-family: var(--cd-serif); font-size: 2rem; font-weight: 600; color: #2a241d; letter-spacing: 0.08em; }
+.dojo-head p { margin: 10px 0 0; color: #8a8073; font-size: 0.96rem; letter-spacing: 0.04em; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.tile {
+  display: block;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fffdf9;
+  border: 1px solid #ece3d2;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.tile:hover { transform: translateY(-4px); border-color: #d9a890; box-shadow: 0 16px 34px rgba(60, 40, 25, 0.12); }
+.tile-img { background: #f2e8d2; }
+.tile-img img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+.tile-cap { display: flex; align-items: baseline; gap: 10px; padding: 16px 18px 18px; border-top: 1px solid #f0e8d8; }
+.tile-cap .tn { font-family: var(--cd-serif); font-size: 1.2rem; font-weight: 600; color: #c2603f; }
+.tile-cap .tt { font-family: var(--cd-serif); font-size: 1.08rem; font-weight: 600; color: #2a241d; }
+.tile-cap .td { margin-left: auto; font-size: 0.84rem; color: #8a8073; white-space: nowrap; }
+
+/* 滚动入场：上浮 + 轻微缩放，逐个错开（refined） */
+.reveal { opacity: 0; transform: translateY(28px) scale(0.985); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); transition-delay: calc(var(--i, 0) * 0.07s); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ===================== 远山（视差） ===================== */
+.range { position: relative; margin-top: 40px; overflow: hidden; }
+.range img { display: block; width: 100%; object-fit: cover; max-height: 420px; transform: translateY(var(--py, 0)); will-change: transform; opacity: 0.92; }
+.range-words { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; }
+.range-words p { margin: 0; font-family: var(--cd-serif); font-size: clamp(1.2rem, 2.6vw, 1.7rem); color: #2f2618; text-shadow: 0 2px 18px rgba(247, 240, 224, 0.96), 0 0 4px rgba(247, 240, 224, 0.9); }
+.range-words a { color: #a8431f; font-weight: 700; text-shadow: 0 2px 14px rgba(247, 240, 224, 0.96); }
 
 @media (prefers-reduced-motion: reduce) {
-  .rise, .seal, .art, .scroll-cue, .enso path { animation: none !important; opacity: 1 !important; }
+  .art img, .seal, .epigraph, .ul, .sub, .actions, .scroll-cue { animation: none !important; opacity: 1 !important; clip-path: none !important; }
   .seal { transform: rotate(-7deg); }
-  .enso path { stroke-dashoffset: 0; opacity: 0.16; }
+  .reveal { opacity: 1; transform: none; transition: none; }
 }
-
-/* ===================== 目录（暖色） ===================== */
-.below { max-width: 1060px; margin: 0 auto; padding: 80px 28px 110px; }
-.hook { padding-bottom: 50px; border-bottom: 1px solid var(--cd-rule); }
-.hook h2 { margin: 0; font-family: var(--cd-serif); font-size: 1.85rem; font-weight: 600; color: var(--vp-c-text-1); }
-.hook-lead { margin: 14px 0 26px; font-size: 1.08rem; color: var(--vp-c-text-2); }
-.chain { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; }
-.node { padding: 9px 18px; border-radius: 10px; background: var(--vp-c-brand-soft); color: var(--vp-c-brand-1); font-weight: 600; }
-.arrow { color: var(--vp-c-text-3); font-style: normal; }
-.hook-foot { margin: 26px 0 0; color: var(--vp-c-text-2); }
-.hook-foot b { color: var(--vp-c-text-1); }
-.hook-foot a { color: var(--vp-c-brand-1); font-weight: 600; white-space: nowrap; }
-
-.catalog { padding: 50px 0 20px; }
-.catalog-intro { margin: 0 0 26px; color: var(--vp-c-text-3); font-size: 0.95rem; }
-.group { margin-bottom: 44px; }
-.group-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--cd-rule); flex-wrap: wrap; }
-.group-head h3 { margin: 0; font-family: var(--cd-serif); font-size: 1.4rem; font-weight: 600; color: var(--vp-c-text-1); }
-.group-desc { font-size: 0.92rem; color: var(--vp-c-text-3); }
-.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
-.card { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 16px; align-items: center; padding: 20px 22px; border: 1px solid var(--vp-c-border); border-radius: 14px; background: var(--vp-c-bg-elv); transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease; }
-.card:hover { border-color: var(--vp-c-brand-3); transform: translateY(-3px); box-shadow: 0 10px 26px rgba(40, 30, 20, 0.09); }
-.card .no { grid-row: 1 / 3; font-family: var(--cd-serif); font-size: 2.1rem; font-weight: 600; color: var(--vp-c-brand-2); line-height: 1; }
-.card .ct { font-family: var(--cd-serif); font-size: 1.16rem; font-weight: 600; color: var(--vp-c-text-1); }
-.card .cd { font-size: 0.9rem; line-height: 1.5; color: var(--vp-c-text-2); }
-
-.howto { margin-top: 30px; padding: 44px 36px; border-radius: 16px; background: var(--vp-c-bg-soft); }
-.howto h2 { margin: 0 0 26px; font-family: var(--cd-serif); font-size: 1.5rem; font-weight: 600; color: var(--vp-c-text-1); }
-.hcols { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
-.hcol h4 { margin: 0 0 8px; font-size: 1.05rem; font-weight: 600; color: var(--vp-c-brand-1); }
-.hcol p { margin: 0; font-size: 0.96rem; line-height: 1.7; color: var(--vp-c-text-2); }
-
-@media (max-width: 640px) { .below { padding: 56px 20px 72px; } }
+@media (max-width: 860px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) {
+  .grid { grid-template-columns: 1fr; }
+  .dojo { padding: 64px 20px 30px; }
+}
 </style>
