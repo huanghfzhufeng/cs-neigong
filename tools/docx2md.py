@@ -51,6 +51,8 @@ def tidy(s):
     s = strip_emoji(s).replace(" ", " ")
     for a, b in DECRAM:
         s = s.replace(a, b)
+    # 转义“像 HTML 标签”的 <（如 <script>、<html>），否则 VitePress(Vue) 会当成标签解析报错
+    s = re.sub(r"<(?=[A-Za-z/!?])", "&lt;", s)
     s = re.sub(r"[ \t]{2,}", " ", s)
     return s.strip()
 
@@ -134,6 +136,7 @@ def render_callout(cell):
 def render_table(tbl):
     def cellmd(c):
         t = strip_emoji(c.text).replace(" ", " ").strip()
+        t = re.sub(r"<(?=[A-Za-z/!?])", "&lt;", t)  # 先转义标签型 <，再注入 <br>
         t = re.sub(r"\s*\n\s*", "<br>", t)
         t = t.replace("|", "\\|")
         return re.sub(r"[ \t]{2,}", " ", t)

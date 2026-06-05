@@ -272,7 +272,7 @@ redo log 刷盘策略 innodb_flush_log_at_trx_commit:0(每秒刷盘,宕机可能
 | 索引失效 | 列上运算/函数、隐式转换、左模糊、断最左前缀、OR 非索引列等。 |
 | ACID | A 靠 undo、D 靠 redo、I 靠锁+MVCC、C 是目的由三者保证。 |
 | 脏读/不可重复读/幻读 | 读未提交;同行值变;范围行数变。 |
-| 隔离级别 | RU<RC(防脏读)<RR(防不可重复读,InnoDB 默认)<串行化。 |
+| 隔离级别 | RU&lt;RC(防脏读)&lt;RR(防不可重复读,InnoDB 默认)<串行化。 |
 | MVCC | 隐藏列+版本链+ReadView,按可见性规则找可见版本,读不加锁。 |
 | RC vs RR | RC 每次读建新 ReadView;RR 只在首次读建一次并复用。 |
 | 锁分类 | 乐观/悲观、表锁/行锁、共享 S/排他 X。 |

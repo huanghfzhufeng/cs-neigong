@@ -1,0 +1,235 @@
+/* =========================================================
+   计算机基础 · 真懂手册 —— Anthropic 风格主题
+   暖纸背景 / 陶土点缀 / 衬线标题 / 克制留白 / 重可读性
+   ========================================================= */
+
+/* ---------- 字体族 ---------- */
+:root {
+  --vp-font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Microsoft YaHei", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  /* 衬线标题：拉丁 Newsreader + 中文 宋体 / 思源宋体（用户 Mac 自带宋体，离线也优雅） */
+  --cd-serif: "Newsreader", "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC",
+    Georgia, "STSong", "SimSun", serif;
+  --cd-zoom-bg: rgba(28, 26, 23, 0.82);
+}
+
+/* ---------- 浅色：暖纸 ---------- */
+:root {
+  --vp-c-bg: #faf8f3;
+  --vp-c-bg-alt: #f2eee5;
+  --vp-c-bg-soft: #f1ebe0;
+  --vp-c-bg-elv: #fffdf9;
+
+  --vp-c-text-1: #29261f;
+  --vp-c-text-2: #5f574b;
+  --vp-c-text-3: #8b8273;
+
+  --vp-c-divider: #e8e1d2;
+  --vp-c-border: #e1d9c8;
+  --vp-c-gutter: #ece5d7;
+
+  /* 陶土 / 珊瑚 —— Anthropic 招牌色 */
+  --vp-c-brand-1: #b1542f;
+  --vp-c-brand-2: #c2603f;
+  --vp-c-brand-3: #cc785c;
+  --vp-c-brand-soft: rgba(204, 120, 92, 0.13);
+
+  --cd-rule: #ebe3d4;
+}
+
+/* ---------- 深色：暖夜 ---------- */
+.dark {
+  --vp-c-bg: #1b1916;
+  --vp-c-bg-alt: #221e19;
+  --vp-c-bg-soft: #27231c;
+  --vp-c-bg-elv: #221f1a;
+
+  --vp-c-text-1: #ece6da;
+  --vp-c-text-2: #b4aa95;
+  --vp-c-text-3: #8a806d;
+
+  --vp-c-divider: #353029;
+  --vp-c-border: #3b362d;
+  --vp-c-gutter: #1f1c17;
+
+  --vp-c-brand-1: #e3a584;
+  --vp-c-brand-2: #d98a66;
+  --vp-c-brand-3: #cc785c;
+  --vp-c-brand-soft: rgba(217, 138, 102, 0.15);
+
+  --cd-rule: #322d26;
+  --cd-zoom-bg: rgba(10, 9, 8, 0.9);
+}
+
+/* ---------- 正文排版 ---------- */
+.vp-doc {
+  font-size: 16.5px;
+  line-height: 1.82;
+}
+/* 舒适行宽 */
+.VPDoc .content-container { max-width: 748px; }
+.vp-doc p,
+.vp-doc li { letter-spacing: 0.005em; }
+.vp-doc p { margin: 1.05em 0; }
+.vp-doc li + li { margin-top: 0.4em; }
+
+/* 标题用衬线，营造编辑感 */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4 {
+  font-family: var(--cd-serif);
+  letter-spacing: -0.005em;
+}
+.vp-doc h1 { font-size: 2.15rem; line-height: 1.25; font-weight: 600; margin-bottom: 0.2em; }
+.vp-doc h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 3rem;
+  padding-top: 1.7rem;
+  border-top: 1px solid var(--cd-rule);
+}
+.vp-doc h2 .header-anchor { font-family: var(--vp-font-family-base); }
+.vp-doc h3 { font-size: 1.18rem; font-weight: 600; margin-top: 1.9rem; }
+.vp-doc h2 + h3 { margin-top: 0.9rem; }
+
+/* 链接：陶土，下划线低调 */
+.vp-doc a {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--vp-c-brand-soft);
+}
+.vp-doc a:hover { text-decoration-color: var(--vp-c-brand-2); }
+
+/* ---------- 引用块 ---------- */
+/* 默认（叙事框，如「本阶段小结」「Anthropic 的实践」） */
+.vp-doc blockquote {
+  margin: 1.45rem 0;
+  padding: 0.8rem 1.15rem;
+  border-left: 3px solid var(--vp-c-border);
+  border-radius: 0 9px 9px 0;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+}
+.vp-doc blockquote > p { margin: 0.25em 0; }
+.vp-doc blockquote > p:first-child { margin-top: 0; }
+.vp-doc blockquote > p:last-child { margin-bottom: 0; }
+
+/* 一句话讲透 —— 核心定义，温和高亮 */
+.vp-doc blockquote.cd-core {
+  border-left-color: var(--vp-c-brand-3);
+  background:
+    linear-gradient(0deg, var(--vp-c-brand-soft), var(--vp-c-brand-soft)),
+    var(--vp-c-bg-elv);
+}
+.vp-doc blockquote.cd-core strong:first-child { color: var(--vp-c-brand-1); }
+
+/* 放到 vibe coding 里 —— 这套手册的灵魂，要跳出来 */
+.vp-doc blockquote.cd-vibe {
+  border-left: 4px solid var(--vp-c-brand-2);
+  background: var(--vp-c-brand-soft);
+}
+.vp-doc blockquote.cd-vibe strong:first-child {
+  color: var(--vp-c-brand-1);
+  letter-spacing: 0.01em;
+}
+
+/* ---------- 图片：圆角描边 + 可点击放大 ---------- */
+.vp-doc img {
+  display: block;
+  margin: 1.7rem auto;
+  border-radius: 10px;
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: 0 1px 3px rgba(40, 30, 20, 0.06);
+  cursor: zoom-in;
+  max-width: 100%;
+}
+.dark .vp-doc img { box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); }
+
+/* ---------- 表格 ---------- */
+.vp-doc table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.94em;
+  line-height: 1.6;
+}
+.vp-doc th {
+  background: var(--vp-c-bg-soft);
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+.vp-doc th,
+.vp-doc td {
+  border: 1px solid var(--vp-c-divider);
+  padding: 0.55rem 0.8rem;
+}
+.vp-doc tr { background: transparent; border: 0; }
+.vp-doc tr:nth-child(2n) td { background: var(--vp-c-bg-alt); }
+
+/* 行内代码 / 代码块 */
+.vp-doc :not(pre) > code {
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-brand-1);
+  font-size: 0.86em;
+  border-radius: 5px;
+}
+
+/* ---------- 首页 Hero ---------- */
+.VPHero .name {
+  font-family: var(--cd-serif);
+  font-size: 3.3rem;
+  line-height: 1.1;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--vp-c-text-1);
+}
+.VPHero .text {
+  font-family: var(--cd-serif);
+  font-size: 2rem;
+  color: var(--vp-c-brand-1);
+}
+.VPHero .tagline {
+  font-size: 1.12rem;
+  line-height: 1.7;
+  color: var(--vp-c-text-2);
+  max-width: 40em;
+}
+.VPButton.brand {
+  background: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+}
+.VPButton.brand:hover { background: var(--vp-c-brand-2); border-color: var(--vp-c-brand-2); }
+
+/* 首页卡片 */
+.VPFeature {
+  border: 1px solid var(--vp-c-border);
+  background: var(--vp-c-bg-elv);
+  border-radius: 12px;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.VPFeature:hover {
+  border-color: var(--vp-c-brand-3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(40, 30, 20, 0.08);
+}
+.VPFeature .title {
+  font-family: var(--cd-serif);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.dark .VPFeature:hover { box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35); }
+
+/* ---------- 导航 / 侧栏 ---------- */
+.VPNavBarTitle .title {
+  font-family: var(--cd-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.VPSidebarItem.level-0 > .item .text { font-weight: 600; }
+.VPSidebarItem.is-active > .item .link .text { color: var(--vp-c-brand-1); }
+
+/* 选中文本 */
+::selection { background: var(--vp-c-brand-soft); }

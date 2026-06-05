@@ -1,3 +1,11 @@
+# 依赖与构建产物
+node_modules/
+.vitepress/cache/
+.vitepress/dist/
+
+# 编辑器/本地工具
+.claude/
+
 # 临时/系统文件
 .DS_Store
 *.tmp
