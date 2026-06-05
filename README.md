@@ -1,5 +1,7 @@
 # 计算机基础 · 真懂手册
 
+**在线阅读 → https://huanghfzhufeng.github.io/cs-neigong/**
+
 > 不是为了面试，是为了真懂——每个东西**是什么、为什么这么设计、解决什么问题、怎么用**。
 >
 > 懂了这些，vibe coding 时你才压得住模型：知道自己在要什么，判断得出它给的对不对，而不是把 vibe 垃圾越堆越高。人和模型是相互的——你的上限，决定了它能帮你到哪。
@@ -83,3 +85,25 @@
 九份是一块块砖，这一页是把它们搭起来的图纸。当你能用一条请求把它们串起来、能认出跨领域的同一个概念、能用五条主线思想分析任何新问题——你面对的就不再是一堆零散的知识点，而是一套能举一反三的体系。
 
 带着这套体系，你指挥模型时心里有数，也认得出什么是 vibe 垃圾。点连成线，线织成网。
+
+---
+
+## 本地开发 / 重新生成
+
+九份 `.md` 视作构建产物：由源 `.docx` 经脚本生成，再用 VitePress 构建站点。
+
+```bash
+# 1) 从源 docx 重新生成某一份（含配图，输出到 assets/<slug>/）
+python3 tools/docx2md.py <源.docx> <NN-名称.md> <NN-名称>
+
+# 2) 注入「放到 vibe coding 里」等视角（可复现，改文案就改这个脚本）
+python3 tools/inject_vibe.py
+
+# 3) 本地预览 / 构建
+npm install
+npm run docs:dev      # http://localhost:5173/cs-neigong/
+npm run docs:build    # 产物在 .vitepress/dist
+```
+
+推送到 `main` 分支后，GitHub Actions 会自动构建并部署到 GitHub Pages。
+
