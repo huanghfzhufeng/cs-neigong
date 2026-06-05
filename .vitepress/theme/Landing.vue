@@ -77,7 +77,6 @@ onUnmounted(() => {
         <div class="art">
           <div class="art-glow"></div>
           <span class="art-medal"><img :src="center" alt="内功修炼者" /></span>
-          <div class="seal" aria-hidden="true"><span>内</span><span>功</span></div>
         </div>
         <h1 class="epigraph">招式人人会，内功定高下</h1>
         <div class="lead">
@@ -148,13 +147,6 @@ onUnmounted(() => {
 }
 .art-medal img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.05); }
 .art-glow { position: absolute; inset: -16%; border-radius: 50%; background: radial-gradient(circle, rgba(194, 96, 63, 0.16), transparent 64%); filter: blur(16px); animation: breathe 6s ease-in-out infinite; }
-.seal {
-  position: absolute; right: 2%; bottom: 6%; z-index: 3; width: 22%; max-width: 56px; aspect-ratio: 1;
-  background: #b5362b; border-radius: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  box-shadow: inset 0 0 0 1.5px rgba(255, 244, 234, 0.2), 0 2px 8px rgba(120, 30, 24, 0.3); transform: rotate(-7deg);
-  opacity: 0; animation: stamp 0.5s cubic-bezier(0.34, 1.4, 0.5, 1) 1.4s forwards;
-}
-.seal span { font-family: var(--cd-serif); font-weight: 700; font-size: clamp(0.85rem, 1.5vw, 1.15rem); line-height: 1.04; color: #faf2e6; }
 .epigraph { margin: 26px 0 0; font-family: var(--cd-serif); font-size: clamp(1.8rem, 4.4vw, 2.9rem); font-weight: 600; color: #2a241d; letter-spacing: 0.05em; opacity: 0; animation: fade 0.9s ease 0.6s forwards; }
 .sub { margin: 14px auto 0; max-width: 28em; font-size: 1.02rem; color: #6b6053; opacity: 0; animation: fade 0.9s ease 0.85s forwards; }
 .actions { display: flex; gap: 14px; justify-content: center; margin-top: 30px; opacity: 0; animation: fade 0.9s ease 1.05s forwards; }
@@ -167,7 +159,6 @@ onUnmounted(() => {
 
 @keyframes develop { from { opacity: 0; transform: scale(0.92); filter: blur(10px); } to { opacity: 1; transform: none; filter: blur(0); } }
 @keyframes fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-@keyframes stamp { 0% { opacity: 0; transform: rotate(-7deg) scale(1.7); } 60% { opacity: 1; transform: rotate(-7deg) scale(0.92); } 100% { opacity: 1; transform: rotate(-7deg) scale(1); } }
 @keyframes breathe { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 
 /* hero 宣言（首屏直出，不另开段落） */
@@ -210,8 +201,7 @@ onUnmounted(() => {
 .range-words a { color: #a8431f; font-weight: 700; text-shadow: 0 2px 14px rgba(247, 240, 224, 0.96); }
 
 @media (prefers-reduced-motion: reduce) {
-  .art-medal, .seal, .epigraph, .sub, .actions, .scroll-cue { animation: none !important; opacity: 1 !important; }
-  .seal { transform: rotate(-7deg); }
+  .art-medal, .epigraph, .lead, .actions, .scroll-cue { animation: none !important; opacity: 1 !important; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 @media (max-width: 820px) { .forms { grid-template-columns: repeat(2, 1fr); } }
