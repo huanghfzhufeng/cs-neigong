@@ -191,7 +191,7 @@
 /* 选中文本 */
 ::selection { background: var(--vp-c-brand-soft); }
 
-/* ---------- 首页：宇宙 hero 全屏，隐藏默认导航与内容内边距 ---------- */
-.cosmos-home .VPNav { display: none; }
-.cosmos-home .VPContent { padding-top: 0 !important; }
-.cosmos-home .VPPage { margin: 0 !important; }
+/* ---------- 首页：扉页全屏，隐藏默认导航与内容内边距 ---------- */
+.home-hero .VPNav { display: none; }
+.home-hero .VPContent { padding-top: 0 !important; }
+.home-hero .VPPage { margin: 0 !important; }
