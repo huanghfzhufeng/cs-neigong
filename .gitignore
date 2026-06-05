@@ -11,3 +11,6 @@ node_modules/
 *.tmp
 tools/__pycache__/
 .env
+
+# 生成的 PNG 原图（站点只用压好的 webp）
+.vitepress/theme/assets/*.png
