@@ -209,5 +209,16 @@ onUnmounted(() => {
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 @media (max-width: 820px) { .forms { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) {
+  /* 移动端 hero：内容从顶部往下排、避开顶栏；标题缩小不断行；隐藏滚动提示 */
+  .codex { justify-content: flex-start; padding-top: 88px; padding-bottom: 48px; }
+  .cx-top { padding: 0 20px; }
+  .kicker { letter-spacing: 0.12em; font-size: 0.76rem; margin-bottom: 18px; }
+  .art-medal { width: 200px; }
+  .epigraph { font-size: 1.55rem; letter-spacing: 0.02em; margin-top: 22px; }
+  .lead { margin-top: 16px; }
+  .lead p { font-size: 1rem; line-height: 1.85; }
+  .scroll-cue { display: none; }
+}
 @media (max-width: 520px) { .forms { grid-template-columns: 1fr; } .forms-sec { padding: 60px 20px 40px; } }
 </style>
