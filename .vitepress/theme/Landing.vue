@@ -12,8 +12,10 @@ import m06 from './assets/m-06.webp'
 import m07 from './assets/m-07.webp'
 import m08 from './assets/m-08.webp'
 import m09 from './assets/m-09.webp'
+import m10 from './assets/m-10.webp'
 
 const GH = 'https://github.com/huanghfzhufeng/cs-neigong'
+const CN = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十']
 
 const forms = [
   { n: '一', name: '计算机组成原理', desc: '机器到底怎么算', img: m01, link: '/01-计算机组成原理/' },
@@ -25,7 +27,9 @@ const forms = [
   { n: '七', name: '系统质量属性与架构评估', desc: '怎么权衡好坏', img: m07, link: '/07-系统质量属性与架构评估/' },
   { n: '八', name: '软件工程', desc: '怎么把事做对', img: m08, link: '/08-软件工程/' },
   { n: '九', name: 'LLM 与 Agent 工程', desc: '怎么用模型把活干好', img: m09, link: '/09-LLM与Agent工程/' },
+  { n: '十', name: '架构风格与设计', desc: '系统怎么搭、风格怎么选', img: m10, link: '/10-架构风格与设计/' },
 ]
+const formsCountCN = CN[forms.length] ?? String(forms.length)
 
 const mountainsEl = ref<HTMLElement>()
 let io: IntersectionObserver | undefined
@@ -88,13 +92,13 @@ onUnmounted(() => {
           <a class="btn ghost" :href="GH" target="_blank" rel="noreferrer">GitHub</a>
         </div>
       </div>
-      <button class="scroll-cue" @click="scrollDown" aria-label="向下">内功九式 ↓</button>
+      <button class="scroll-cue" @click="scrollDown" aria-label="向下">内功{{ formsCountCN }}式 ↓</button>
     </section>
 
     <!-- ===== 内功九式（拳谱） ===== -->
     <section class="forms-sec">
       <div class="forms-head reveal">
-        <h2>内功九式</h2>
+        <h2>内功{{ formsCountCN }}式</h2>
         <p>循序修炼，由浅入深 · 持续增补</p>
       </div>
       <div class="forms">
@@ -111,7 +115,7 @@ onUnmounted(() => {
     <div class="range" ref="mountainsEl">
       <img :src="mountains" alt="" aria-hidden="true" loading="lazy" />
       <div class="range-words reveal">
-        <p>九式是一招招式，连起来才是一身内功。</p>
+        <p>一招一式，连起来才是一身内功。</p>
         <a :href="withBase('/00-导读')">看脉络怎么贯通 →</a>
       </div>
     </div>

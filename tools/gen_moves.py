@@ -36,6 +36,7 @@ MOVES = [
     ("m-07", "twisting with both arms parting outward like 'parting the clouds' (bo yun), wide graceful sweep"),
     ("m-08", "standing qigong, both palms cupped at the lower abdomen (dantian), a faint wisp of inner energy"),
     ("m-09", "standing tall, one arm raised overhead with sword-fingers (jian zhi) extended, the other hand low"),
+    ("m-10", "in 'white crane spreads its wings' (bai he liang chi), one arm raised high and open, the other pressing down low, weight settled on the back leg"),
 ]
 
 
