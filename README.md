@@ -1,6 +1,10 @@
 # 内功
 
 <p align="center">
+  <img src="./docs/images/site-showcase.png" alt="CS-Neigong Live Online Handbook" width="100%" />
+</p>
+
+<p align="center">
   <img src="./docs/images/knowledge-map.svg" alt="CS-Neigong 10-Chapter Knowledge Map" width="100%" />
 </p>
 
