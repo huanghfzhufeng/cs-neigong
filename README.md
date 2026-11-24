@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="./docs/images/knowledge-map.svg" alt="CS-Neigong 10-Chapter Knowledge Map" width="100%" />
+  <img src="./docs/images/neigong-ten-forms.png" alt="内功十式 · 计算机基础真懂手册" width="100%" />
 </p>
 
 <p align="center">
